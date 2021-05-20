@@ -26,20 +26,26 @@
 
 uint16_t SCD30_readRegister(I2C_HandleTypeDef* i2cHandle, uint16_t registerAddress){
 	
-	uint8_t *regAddr;
-	uint8_t receive_buffer[3];
+	int returnValue = 0;
 	
-	*regAddr = (0x00FFu & registerAddress);
+	uint8_t regAddr[2];
+	// uint8_t receive_buffer[18] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	uint8_t receive_buffer[2] = {0,0};
 	
+	regAddr[1] = (0xFFu & registerAddress);
+	regAddr[0] = (0xFFu & (registerAddress >> 8));
 	
 	// set the register pointer to the register wanted to read 
-	HAL_I2C_Master_Transmit(i2cHandle, SCD30_BASE_ADDRESS, regAddr, 1, 100);
 	
-	// receive the n x 8bit data into the receive_buffer
-	HAL_I2C_Master_Receive(i2cHandle, SCD30_BASE_ADDRESS, receive_buffer, sizeof(receive_buffer)/sizeof(receive_buffer[0]), 100);
-	
+	if(HAL_I2C_Master_Transmit(i2cHandle, SCD30_BASE_ADDRESS, regAddr, 2 , 150) != 0x00U){
+		return returnValue = -1;
+	}else{
+		// receive the n x 8bit data into the receive_buffer
+		HAL_I2C_Master_Receive(i2cHandle, SCD30_BASE_ADDRESS, receive_buffer, sizeof(receive_buffer)/sizeof(receive_buffer[0]), 150);
+		
 
-	return ((uint8_t)receive_buffer[1] << 8 | receive_buffer[0]);
+		return returnValue = ((uint8_t)receive_buffer[1] << 8 | receive_buffer[0]);
+	}
 
 }
 
