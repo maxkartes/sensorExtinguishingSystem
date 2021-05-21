@@ -27,12 +27,61 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
+
+typedef enum {
+  SCDnoERROR,                 ///< all ok
+  SCDInvalidParameter,        ///< at least one parameter was invalid when calling the function
+  SCDisReady,                 ///< ready ststus register
+  SCDnoAckERROR,              ///< no I2C ACK error
+  SCDtimeoutERROR,            ///< I2C timeout error
+  SCDcrcERROR,                ///< CRC error, any
+  SCDcrcERRORv1,              ///< CRC error on value 1
+  SCDcrcERRORv2,              ///< CRC error on value 2
+  SCDcrcERRORv3,              ///< CRC error on value 3
+  SCDcrcERRORv4,              ///< CRC error on value 4
+  SCDcrcERRORv5,              ///< CRC error on value 5
+  SCDcrcERRORv6,              ///< CRC error on value 6
+} SCD30ErrCodeType;
+
+
+struct __SCD30Descriptor;     // incomplte type !
+
+/// Datentyp zur Beschreibung des vollstaendigen Kontextes einer SCD30 Instanz
+typedef struct __SCD30Descriptor SCD30DescriptorType;
+
+typedef SCD30DescriptorType *SCD30HandleType;
+
+SCD30ErrCodeType SCD30init(SCD30HandleType * ptr2Handle);
+
+SCD30ErrCodeType SCD30_getSerialNumber(I2C_HandleTypeDef* i2cHandle, SCD30DescriptorType * desr);
+
+
 uint16_t SCD30_readRegister(I2C_HandleTypeDef* i2cHandle, uint16_t registerAddress);
 
 
 
+
+
 /* USER CODE BEGIN Private defines */
-#define SCD30_BASE_ADDRESS  0xC2
+//THe default I2C address for the SCD30 is 0x61, shifted to left results in 0XC2
+#define SCD30_BASE_ADDR 												0xC2
+		
+//Available commands		
+#define CMD_CONTINUOUS_MEASUREMENT  						0x0010
+#define CMD_SET_MEASUREMENT_INTERVAL 						0x4600
+#define CMD_GET_DATA_READY 											0x0202
+#define CMD_READ_MEASUREMENT 										0x0300
+#define CMD_AUTOMATIC_SELF_CALIBRATION 					0x5306
+#define CMD_SET_FORCED_RECALIBRATION_FACTOR 		0x5204
+#define CMD_SET_TEMPERATURE_OFFSET 							0x5403
+#define CMD_SET_ALTITUDE_COMPENSATION 					0x5102
+#define CMD_READ_SERIALNBR 											0xD033
+
+#define SCD30_POLYNOMIAL                        0x131   // P(x) = x^8 + x^5 + x^4 + 1 = 100110001
+#define SCD30_CRC_INIT                          0xff
+            
+#define SCD30_SN_SIZE                           33      //size of the s/n ascii string + CRC values
+ 
 
 /* USER CODE END Private defines */
 

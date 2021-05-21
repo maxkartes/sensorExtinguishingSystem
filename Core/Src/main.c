@@ -46,7 +46,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+SCD30HandleType SCD30Handle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,8 +93,12 @@ int main(void)
   MX_I2C1_Init();
   MX_USART2_UART_Init();
  
+  SCD30init(&SCD30Handle);
+ 
   /* USER CODE BEGIN 2 */
 	firmwareVersion =  SCD30_readRegister(&hi2c1, 0xD100);
+  
+  SCD30_getSerialNumber(&hi2c1, SCD30Handle);
   /* USER CODE END 2 */
 
   /* Infinite loop */
