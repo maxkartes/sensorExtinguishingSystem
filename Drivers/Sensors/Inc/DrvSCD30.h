@@ -53,6 +53,12 @@ typedef SCD30DescriptorType *SCD30HandleType;
 
 SCD30ErrCodeType SCD30init(SCD30HandleType * ptr2Handle);
 
+SCD30ErrCodeType SCD30_startMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle, uint16_t baro);
+
+SCD30ErrCodeType SCD30_setTemperatureOffs(I2C_HandleTypeDef * i2cHandle, uint16_t temp);
+
+SCD30ErrCodeType SCD30_readMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle);
+
 SCD30ErrCodeType SCD30_getSerialNumber(I2C_HandleTypeDef* i2cHandle, SCD30DescriptorType * desr);
 
 

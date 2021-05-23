@@ -1,7 +1,7 @@
 Dependencies for Project 'Test_Sensoren', Target 'Test_Sensoren': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
 F (startup_stm32f411xe.s)(0x60A4BEF7)(--cpu Cortex-M4.fp.sp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_Test_Sensoren-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 534" --pd "_RTE_ SETA 1" --pd "STM32F411xE SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f411xe.lst --xref -o test_sensoren\startup_stm32f411xe.o --depend test_sensoren\startup_stm32f411xe.d)
-F (../Core/Src/main.c)(0x60A7D854)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Drivers\Sensors\Inc-I.\RTE\_Test_Sensoren-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F411xE -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F411xE-o test_sensoren\main.o --omf_browse test_sensoren\main.crf --depend test_sensoren\main.d)
+F (../Core/Src/main.c)(0x60A97ADF)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Drivers\Sensors\Inc-I.\RTE\_Test_Sensoren-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F411xE -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F411xE-o test_sensoren\main.o --omf_browse test_sensoren\main.crf --depend test_sensoren\main.d)
 I (../Core/Inc/main.h)(0x60A4BEDF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x60A4BEF3)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x60A4BEDF)
@@ -39,7 +39,7 @@ I (../Core/Inc/adc.h)(0x60A4BEDF)
 I (../Core/Inc/i2c.h)(0x60A4BEDF)
 I (../Core/Inc/usart.h)(0x60A4BEDF)
 I (../Core/Inc/gpio.h)(0x60A4BEDF)
-I (..\Drivers\Sensors\Inc\DrvSCD30.h)(0x60A7D833)
+I (..\Drivers\Sensors\Inc\DrvSCD30.h)(0x60AAC3B5)
 F (../Core/Src/gpio.c)(0x60A4BEDF)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Drivers\Sensors\Inc-I.\RTE\_Test_Sensoren-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F411xE -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F411xE-o test_sensoren\gpio.o --omf_browse test_sensoren\gpio.crf --depend test_sensoren\gpio.d)
 I (../Core/Inc/gpio.h)(0x60A4BEDF)
 I (../Core/Inc/main.h)(0x60A4BEDF)
@@ -942,8 +942,8 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h)(0x60A4BEF4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x60A4BEF4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x60A4BEF4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x60A4BEF5)
-F (..\Drivers\Sensors\Src\DrvSCD30.c)(0x60A7D835)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\Drivers\STM32F4xx_HAL_Driver\Inc -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Drivers\Sensors\Inc-I.\RTE\_Test_Sensoren-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F411xE -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F411xE-o test_sensoren\drvscd30.o --omf_browse test_sensoren\drvscd30.crf --depend test_sensoren\drvscd30.d)
-I (..\Drivers\Sensors\Inc\DrvSCD30.h)(0x60A7D833)
+F (..\Drivers\Sensors\Src\DrvSCD30.c)(0x60AAC3D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\Drivers\STM32F4xx_HAL_Driver\Inc -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\Drivers\Sensors\Inc-I.\RTE\_Test_Sensoren-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\d.kuhn\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F411xE -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F411xE-o test_sensoren\drvscd30.o --omf_browse test_sensoren\drvscd30.crf --depend test_sensoren\drvscd30.d)
+I (..\Drivers\Sensors\Inc\DrvSCD30.h)(0x60AAC3B5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x60A4BEF3)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x60A4BEDF)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x60A4BEF4)

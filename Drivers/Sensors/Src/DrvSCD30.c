@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    DrvSCD30.c
   * @brief   This file provides code for the configuration
-  *          of the USART instances.
+  *          of the SCD30 instances.
   ******************************************************************************
   * @attention
   *
@@ -118,6 +118,124 @@ SCD30ErrCodeType SCD30_checkCrc2b(uint16_t seed, uint8_t crcIn)
   return SCDnoERROR;
 }
 
+SCD30ErrCodeType SCD30_startMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle, uint16_t baro)
+{
+    uint8_t i2cBuffer[64];
+    HAL_StatusTypeDef respErrValue;
+  
+    i2cBuffer[0] = (0xFFu & (CMD_CONTINUOUS_MEASUREMENT >> 8));
+    i2cBuffer[1] = (0xFFu & CMD_CONTINUOUS_MEASUREMENT);  
+    
+    i2cBuffer[2] = baro >> 8;
+    i2cBuffer[3] = baro & 255;
+    i2cBuffer[4] = SCD30_calcCrc2b(baro);
+
+    respErrValue = HAL_I2C_Master_Transmit(i2cHandle, SCD30_BASE_ADDR, i2cBuffer, 5, 150);
+
+    if(respErrValue == HAL_ERROR){
+      return SCDnoAckERROR;
+    }else if(respErrValue == HAL_TIMEOUT){
+      return SCDtimeoutERROR;
+    }else{
+      return SCDnoERROR;
+    }
+    
+}
+
+SCD30ErrCodeType SCD30_readMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle)
+{
+  uint8_t i2cBuffer[64];
+  uint8_t regAddr[2];
+  HAL_StatusTypeDef respErrValue;
+  
+  regAddr[0] = (0xFFu & (CMD_READ_MEASUREMENT >> 8));
+  regAddr[1] = (0xFFu & CMD_READ_MEASUREMENT);  
+  
+  respErrValue = HAL_I2C_Master_Transmit(i2cHandle, SCD30_BASE_ADDR, regAddr, 2, 150);
+  
+  if(respErrValue == HAL_ERROR){
+    return SCDnoAckERROR;
+  }else if(respErrValue == HAL_TIMEOUT){
+    return SCDtimeoutERROR;
+  }
+  
+  int i = 0;
+  for(i = 0; i < sizeof(i2cBuffer)/sizeof(i2cBuffer[0]); i++){
+    i2cBuffer[i] = 0;
+  }
+  
+  respErrValue = HAL_I2C_Master_Receive(i2cHandle, SCD30_BASE_ADDR, i2cBuffer, 18, 150);
+  
+  if(respErrValue == HAL_ERROR){
+    return SCDnoAckERROR;
+  }else if(respErrValue == HAL_TIMEOUT){
+    return SCDtimeoutERROR;
+  }
+  
+  uint16_t stat = (i2cBuffer[0] << 8) | i2cBuffer[1];
+  SCD30_Handle->co2m = stat;
+  uint8_t dat = SCD30_checkCrc2b(stat, i2cBuffer[2]);
+  if(dat == SCDcrcERROR) return SCDcrcERRORv1;
+
+  stat = (i2cBuffer[3] << 8) | i2cBuffer[4];
+  SCD30_Handle->co2l = stat;
+  dat = SCD30_checkCrc2b(stat, i2cBuffer[5]);
+  if(dat == SCDcrcERROR) return SCDcrcERRORv2;
+  
+  stat = (i2cBuffer[6] << 8) | i2cBuffer[7];
+  SCD30_Handle->tempm = stat;
+  dat = SCD30_checkCrc2b(stat, i2cBuffer[8]);
+  if(dat == SCDcrcERROR) return SCDcrcERRORv3;
+  
+  stat = (i2cBuffer[9] << 8) | i2cBuffer[10];
+  SCD30_Handle->templ = stat;
+  dat = SCD30_checkCrc2b(stat, i2cBuffer[11]);
+  if(dat == SCDcrcERROR) return SCDcrcERRORv4;
+  
+  stat = (i2cBuffer[12] << 8) | i2cBuffer[13];
+  SCD30_Handle->humm = stat;
+  dat = SCD30_checkCrc2b(stat, i2cBuffer[14]);
+  if(dat == SCDcrcERROR) return SCDcrcERRORv5;
+  
+  stat = (i2cBuffer[15] << 8) | i2cBuffer[16];
+  SCD30_Handle->huml = stat;
+  dat = SCD30_checkCrc2b(stat, i2cBuffer[17]);
+  if(dat == SCDcrcERROR) return SCDcrcERRORv6;
+  
+  SCD30_Handle->co2i = (SCD30_Handle->co2m << 16) | SCD30_Handle->co2l ;
+  SCD30_Handle->tempi = (SCD30_Handle->tempm << 16) | SCD30_Handle->templ ;
+  SCD30_Handle->humi = (SCD30_Handle->humm << 16) | SCD30_Handle->huml ;
+  
+  SCD30_Handle->co2f = *(float*)&SCD30_Handle->co2i;
+  SCD30_Handle->tempf = *(float*)&SCD30_Handle->tempi;
+  SCD30_Handle->humf = *(float*)&SCD30_Handle->humi;
+    
+  
+  return SCDnoERROR;
+  
+}
+
+SCD30ErrCodeType SCD30_setTemperatureOffs(I2C_HandleTypeDef * i2cHandle, uint16_t temp)
+{
+    uint8_t i2cBuffer[64];
+    HAL_StatusTypeDef respErrValue;
+    
+    i2cBuffer[0] = CMD_SET_TEMPERATURE_OFFSET >> 8;
+    i2cBuffer[1] = CMD_SET_TEMPERATURE_OFFSET & 0xFFu;
+    i2cBuffer[2] = temp >> 8;
+    i2cBuffer[3] = temp & 0xFFu;
+    i2cBuffer[4] = SCD30_calcCrc2b(temp);
+  
+    respErrValue = HAL_I2C_Master_Transmit(i2cHandle, SCD30_BASE_ADDR, i2cBuffer, 5, 150);
+
+    if(respErrValue == HAL_ERROR){
+      return SCDnoAckERROR;
+    }else if(respErrValue == HAL_TIMEOUT){
+      return SCDtimeoutERROR;
+    }else{
+      return SCDnoERROR;
+    }
+}
 
 SCD30ErrCodeType SCD30_getSerialNumber(I2C_HandleTypeDef* i2cHandle, SCD30HandleType  SCD30_Handle)
 {
@@ -153,7 +271,7 @@ SCD30ErrCodeType SCD30_getSerialNumber(I2C_HandleTypeDef* i2cHandle, SCD30Handle
   }
   
   int t = 0;
-  for(int i = 0; i < SCD30_SN_SIZE; i += 3){
+  for(i = 0; i < SCD30_SN_SIZE; i += 3){
     uint16_t stat = (i2cBuffer[i] << 8) | i2cBuffer[i+1];
     SCD30_Handle->sn[i - t] = stat >> 8;
     SCD30_Handle->sn[i - t + 1] = stat & 0xFFu;

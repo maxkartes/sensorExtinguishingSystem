@@ -96,9 +96,14 @@ int main(void)
   SCD30init(&SCD30Handle);
  
   /* USER CODE BEGIN 2 */
+  SCD30_startMeasurement(&hi2c1, SCD30Handle, 0);
+
+  
 	firmwareVersion =  SCD30_readRegister(&hi2c1, 0xD100);
   
   SCD30_getSerialNumber(&hi2c1, SCD30Handle);
+  
+  SCD30_readMeasurement(&hi2c1, SCD30Handle);
   /* USER CODE END 2 */
 
   /* Infinite loop */
