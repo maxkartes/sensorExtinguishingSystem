@@ -55,6 +55,8 @@ SCD30ErrCodeType SCD30init(SCD30HandleType * ptr2Handle);
 
 SCD30ErrCodeType SCD30_startMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle, uint16_t baro);
 
+SCD30ErrCodeType SDC30_stopMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle);
+
 SCD30ErrCodeType SCD30_setTemperatureOffs(I2C_HandleTypeDef * i2cHandle, uint16_t temp);
 
 SCD30ErrCodeType SCD30_readMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle);
@@ -74,6 +76,7 @@ uint16_t SCD30_readRegister(I2C_HandleTypeDef* i2cHandle, uint16_t registerAddre
 		
 //Available commands		
 #define CMD_CONTINUOUS_MEASUREMENT  						0x0010
+#define CMD_STOP_CONT_MEASUREMENT               0x0104
 #define CMD_SET_MEASUREMENT_INTERVAL 						0x4600
 #define CMD_GET_DATA_READY 											0x0202
 #define CMD_READ_MEASUREMENT 										0x0300

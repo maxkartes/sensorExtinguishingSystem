@@ -142,6 +142,25 @@ SCD30ErrCodeType SCD30_startMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30Hand
     
 }
 
+SCD30ErrCodeType SDC30_stopMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle)
+{
+    uint8_t i2cBuffer[64];
+    HAL_StatusTypeDef respErrValue;
+    
+    i2cBuffer[0] = (0xFFu & (CMD_STOP_CONT_MEASUREMENT >> 8));
+    i2cBuffer[1] = (0xFFu & CMD_STOP_CONT_MEASUREMENT); 
+  
+    respErrValue = HAL_I2C_Master_Transmit(i2cHandle, SCD30_BASE_ADDR, i2cBuffer, 2, 150);
+  
+    if(respErrValue == HAL_ERROR){
+      return SCDnoAckERROR;
+    }else if(respErrValue == HAL_TIMEOUT){
+      return SCDtimeoutERROR;
+    }else{
+      return SCDnoERROR;
+    }
+}
+
 SCD30ErrCodeType SCD30_readMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle)
 {
   uint8_t i2cBuffer[64];
