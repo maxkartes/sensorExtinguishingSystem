@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "DrvSCD30.h"
+#include "DrvMiCS5524.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,12 +48,24 @@
 
 /* USER CODE BEGIN PV */
 SCD30HandleType SCD30Handle;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
 
+/* USER CODE BEGIN PFP */
+void HAL_IncTick(void){
+  
+  uwTick += uwTickFreq;
+  
+  uint32_t const ticksValue = HAL_GetTick();
+  
+  if((ticksValue & 0x000003FFu) == 0u){
+    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+  }
+  
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -67,7 +80,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint16_t firmwareVersion = 0u;
+	uint32_t adcValue = 0u;
 
   /* USER CODE END 1 */
 
@@ -92,18 +105,20 @@ int main(void)
   MX_ADC1_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
- 
-  SCD30init(&SCD30Handle);
+    
+  adcValue = MICS5524_readValue(&hadc1);
+
+  // SCD30init(&SCD30Handle);
  
   /* USER CODE BEGIN 2 */
-  SCD30_startMeasurement(&hi2c1, SCD30Handle, 0);
+  // SCD30_startMeasurement(&hi2c1, SCD30Handle, 0);
 
   
-	firmwareVersion =  SCD30_readRegister(&hi2c1, 0xD100);
+	// firmwareVersion =  SCD30_readRegister(&hi2c1, 0xD100);
   
-  SCD30_getSerialNumber(&hi2c1, SCD30Handle);
+  // SCD30_getSerialNumber(&hi2c1, SCD30Handle);
   
-  SCD30_readMeasurement(&hi2c1, SCD30Handle);
+  // SCD30_readMeasurement(&hi2c1, SCD30Handle);
   /* USER CODE END 2 */
 
   /* Infinite loop */

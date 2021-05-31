@@ -161,6 +161,7 @@ SCD30ErrCodeType SDC30_stopMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30Handl
     }
 }
 
+
 SCD30ErrCodeType SCD30_readMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30HandleType SCD30_Handle)
 {
   uint8_t i2cBuffer[64];
@@ -233,6 +234,7 @@ SCD30ErrCodeType SCD30_readMeasurement(I2C_HandleTypeDef * i2cHandle, SCD30Handl
   return SCDnoERROR;
   
 }
+
 
 SCD30ErrCodeType SCD30_setTemperatureOffs(I2C_HandleTypeDef * i2cHandle, uint16_t temp)
 {
