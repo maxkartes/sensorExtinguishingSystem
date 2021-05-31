@@ -27,11 +27,29 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
+typedef enum {
+  MiCS5524noERROR,                 ///< all ok
+  MiCS5524InvalidParameter,        ///< at least one parameter was invalid when calling the function
+  MiCS5524isReady,                 ///< ready ststus register
+  MiCS5524timeoutERROR,            ///< 
+  MiCS5524HALError,
+} MiCS5524ErrCodeType;
 
 
+struct __MiCS5524Descriptor;     // incomplte type !
 
-uint32_t MICS5524_readValue(ADC_HandleTypeDef* adcHandle);
+/// Datentyp zur Beschreibung des vollstaendigen Kontextes einer SCD30 Instanz
+typedef struct __MiCS5524Descriptor MiCS5524DescriptorType;
 
+typedef MiCS5524DescriptorType *MiCS5524HandleType;
+
+
+MiCS5524ErrCodeType MiCS5524init(ADC_HandleTypeDef* adcHandle, MiCS5524HandleType * ptr2MiCS5524Handle);
+
+
+uint32_t MICS5524_readValue(MiCS5524HandleType MiCS5524Handle);
+
+MiCS5524ErrCodeType MICS5524_getValue(MiCS5524HandleType MiCS5524Handle);
 
 
 

@@ -22,31 +22,89 @@
 
 #include "stm32f4xx_hal_def.h"
 
-uint32_t MICS5524_readValue(ADC_HandleTypeDef* adcHandle){
+
+struct __MiCS5524Descriptor
+{
+  ADC_HandleTypeDef *adcHandle;
+  uint32_t rawADCValue;               /*!< Raw 32 bit ADC Value of DR */
+  
+};
+
+static MiCS5524DescriptorType MiCS5524descr;
+
+
+MiCS5524ErrCodeType MiCS5524init(ADC_HandleTypeDef* adcHandle, MiCS5524HandleType * ptr2MiCS5524Handle){
+  
+  MiCS5524HandleType const MiCS5524Handle = &MiCS5524descr;
+  
+  MiCS5524Handle->adcHandle = adcHandle;
+  
+  *ptr2MiCS5524Handle = MiCS5524Handle;
+  
+  return MiCS5524noERROR;
+    
+}
+
+
+
+
+uint32_t MICS5524_readValue(MiCS5524HandleType MiCS5524Handle){
+  
+  ADC_HandleTypeDef * const ptr2adcHandle = MiCS5524Handle->adcHandle;
   
   HAL_StatusTypeDef respErrValue;
   
   
-  respErrValue =  HAL_ADC_Start(adcHandle);
+  respErrValue =  HAL_ADC_Start(ptr2adcHandle);
   
   if(respErrValue == HAL_ERROR){
-    return -1;
+    return 0;
   }else if(respErrValue == HAL_TIMEOUT){
-    return -1;
+    return 0;
   }
     
-  respErrValue = HAL_ADC_PollForConversion(adcHandle,10);
+  respErrValue = HAL_ADC_PollForConversion(ptr2adcHandle,10);
   
   if(respErrValue == HAL_ERROR){
-    return -1;
+    return 0;
   }else if(respErrValue == HAL_TIMEOUT){
-    return -1;
+    return 0;
   }
     
-    
-   return HAL_ADC_GetValue(adcHandle);
+   
+   return HAL_ADC_GetValue(ptr2adcHandle);
      
 }
+
+
+MiCS5524ErrCodeType MICS5524_getValue(MiCS5524HandleType MiCS5524Handle){
+  
+  ADC_HandleTypeDef * const ptr2adcHandle = MiCS5524Handle->adcHandle;
+  
+  HAL_StatusTypeDef respErrValue;
+  
+  
+  respErrValue =  HAL_ADC_Start(ptr2adcHandle);
+  
+  if(respErrValue == HAL_ERROR){
+    return MiCS5524HALError;
+  }else if(respErrValue == HAL_TIMEOUT){
+    return MiCS5524timeoutERROR;
+  }
+    
+  respErrValue = HAL_ADC_PollForConversion(ptr2adcHandle,10);
+  
+  if(respErrValue == HAL_ERROR){
+    return MiCS5524HALError;
+  }else if(respErrValue == HAL_TIMEOUT){
+    return MiCS5524timeoutERROR;
+  }
+    
+  MiCS5524Handle->rawADCValue = HAL_ADC_GetValue(ptr2adcHandle);
+  return MiCS5524noERROR;
+     
+}
+
 
 
 /* USER CODE BEGIN 0 */
