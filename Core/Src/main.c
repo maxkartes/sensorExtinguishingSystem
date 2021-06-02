@@ -108,8 +108,10 @@ int main(void)
   MX_USART2_UART_Init();
   
   MiCS5524init(&hadc1, &MiCS5524Handle);
+  
+  MICS5524_calcOffsetComp(MiCS5524Handle);
     
-  adcValue = MICS5524_getValue(MiCS5524Handle);
+  // adcValue = MICS5524_getValue(MiCS5524Handle);
 
   // SCD30init(&SCD30Handle);
  

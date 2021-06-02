@@ -21,13 +21,15 @@
 #include "DrvMiCS5524.h"
 
 #include "stm32f4xx_hal_def.h"
+#include "stm32f4xx.h"                  // Device header
+#include "stm32f4xx_hal.h"              // Keil::Device:STM32Cube HAL:Common
 
 
 struct __MiCS5524Descriptor
 {
   ADC_HandleTypeDef *adcHandle;
   uint32_t rawADCValue;               /*!< Raw 32 bit ADC Value of DR */
-  
+  uint32_t offset;
 };
 
 static MiCS5524DescriptorType MiCS5524descr;
@@ -104,6 +106,45 @@ MiCS5524ErrCodeType MICS5524_getValue(MiCS5524HandleType MiCS5524Handle){
   return MiCS5524noERROR;
      
 }
+
+MiCS5524ErrCodeType MICS5524_calcOffsetComp(MiCS5524HandleType MiCS5524Handle){
+  
+  ADC_HandleTypeDef * const ptr2adcHandle = MiCS5524Handle->adcHandle;  
+  HAL_StatusTypeDef respErrValue;
+  
+  
+  
+  uint32_t ADCValueBuffer[256];
+      
+  for(uint32_t i = 0; i < sizeof(ADCValueBuffer)/sizeof(ADCValueBuffer[0]); i++){
+    
+    respErrValue =  HAL_ADC_Start(ptr2adcHandle);
+  
+    if(respErrValue == HAL_ERROR){
+      return MiCS5524HALError;
+    }else if(respErrValue == HAL_TIMEOUT){
+      return MiCS5524timeoutERROR;
+    }      
+    
+    respErrValue = HAL_ADC_PollForConversion(ptr2adcHandle,100);
+  
+    if(respErrValue == HAL_ERROR){
+      return MiCS5524HALError;
+    }else if(respErrValue == HAL_TIMEOUT){
+      return MiCS5524timeoutERROR;
+    }
+    
+    ADCValueBuffer[i] = HAL_ADC_GetValue(ptr2adcHandle);
+    HAL_Delay(100);
+    
+  }
+  
+    
+  return MiCS5524noERROR;
+   
+    
+}
+
 
 
 

@@ -46,12 +46,11 @@ typedef MiCS5524DescriptorType *MiCS5524HandleType;
 
 MiCS5524ErrCodeType MiCS5524init(ADC_HandleTypeDef* adcHandle, MiCS5524HandleType * ptr2MiCS5524Handle);
 
-
 uint32_t MICS5524_readValue(MiCS5524HandleType MiCS5524Handle);
 
 MiCS5524ErrCodeType MICS5524_getValue(MiCS5524HandleType MiCS5524Handle);
 
-
+MiCS5524ErrCodeType MICS5524_calcOffsetComp(MiCS5524HandleType MiCS5524Handle);
 
 
 /* USER CODE END Private defines */
