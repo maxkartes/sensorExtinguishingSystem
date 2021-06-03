@@ -24,12 +24,15 @@
 #include "stm32f4xx.h"                  // Device header
 #include "stm32f4xx_hal.h"              // Keil::Device:STM32Cube HAL:Common
 
+#define POWER_OF_TWO_SHIFT_INDX         7
+#define NMB_OF_ADC_SAMPLES              (1 << POWER_OF_TWO_SHIFT_INDX)
+
 
 struct __MiCS5524Descriptor
 {
   ADC_HandleTypeDef *adcHandle;
-  uint32_t rawADCValue;               /*!< Raw 32 bit ADC Value of DR */
-  uint32_t offset;
+  volatile uint32_t rawADCValue;               /*!< Raw 32 bit ADC Value of DR */
+  volatile uint32_t offset;
 };
 
 static MiCS5524DescriptorType MiCS5524descr;
@@ -112,11 +115,10 @@ MiCS5524ErrCodeType MICS5524_calcOffsetComp(MiCS5524HandleType MiCS5524Handle){
   ADC_HandleTypeDef * const ptr2adcHandle = MiCS5524Handle->adcHandle;  
   HAL_StatusTypeDef respErrValue;
   
+  uint32_t ADCValueBuffer[NMB_OF_ADC_SAMPLES];
+  uint32_t sumADCValues = 0;
   
-  
-  uint32_t ADCValueBuffer[256];
-      
-  for(uint32_t i = 0; i < sizeof(ADCValueBuffer)/sizeof(ADCValueBuffer[0]); i++){
+  for(uint32_t i = 0; i < NMB_OF_ADC_SAMPLES; i++){
     
     respErrValue =  HAL_ADC_Start(ptr2adcHandle);
   
@@ -138,6 +140,12 @@ MiCS5524ErrCodeType MICS5524_calcOffsetComp(MiCS5524HandleType MiCS5524Handle){
     HAL_Delay(100);
     
   }
+  
+  for(uint32_t i = 0; i < NMB_OF_ADC_SAMPLES; i++){
+    sumADCValues = sumADCValues + ADCValueBuffer[i];   
+  }
+  
+  MiCS5524Handle->offset =  sumADCValues >> POWER_OF_TWO_SHIFT_INDX;   // ((sumADCValues * sizeof(ADCValueBuffer[0])) /sizeof(ADCValueBuffer));
   
     
   return MiCS5524noERROR;

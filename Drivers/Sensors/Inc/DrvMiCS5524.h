@@ -50,7 +50,7 @@ uint32_t MICS5524_readValue(MiCS5524HandleType MiCS5524Handle);
 
 MiCS5524ErrCodeType MICS5524_getValue(MiCS5524HandleType MiCS5524Handle);
 
-MiCS5524ErrCodeType MICS5524_calcOffsetComp(MiCS5524HandleType MiCS5524Handle);
+MiCS5524ErrCodeType MICS5524_calcOffsetComp(MiCS5524HandleType MiCS5524Handle, uint32_t NmbOfADCSamples);
 
 
 /* USER CODE END Private defines */
