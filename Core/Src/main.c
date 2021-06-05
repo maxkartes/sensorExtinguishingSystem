@@ -28,6 +28,7 @@
 /* USER CODE BEGIN Includes */
 #include "DrvSCD30.h"
 #include "DrvMiCS5524.h"
+#include "usart_print.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,8 +109,11 @@ int main(void)
   MX_USART2_UART_Init();
   
   MiCS5524init(&hadc1, &MiCS5524Handle);
+  MICS5524_calcOffsetComp(MiCS5524Handle, 100u);
   
-  MICS5524_calcOffsetComp(MiCS5524Handle);
+  UsartPrint(&huart2, "\x1b[31m Hallo Welt \nHallo Welt \nHallo Welt \nHallo Welt \n");
+   
+  
     
   // adcValue = MICS5524_getValue(MiCS5524Handle);
 

@@ -110,7 +110,7 @@ MiCS5524ErrCodeType MICS5524_getValue(MiCS5524HandleType MiCS5524Handle){
      
 }
 
-MiCS5524ErrCodeType MICS5524_calcOffsetComp(MiCS5524HandleType MiCS5524Handle){
+MiCS5524ErrCodeType MICS5524_calcOffsetComp(MiCS5524HandleType MiCS5524Handle, uint32_t NmbOfADCSamples){
   
   ADC_HandleTypeDef * const ptr2adcHandle = MiCS5524Handle->adcHandle;  
   HAL_StatusTypeDef respErrValue;
