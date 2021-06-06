@@ -39,10 +39,39 @@ static const char *level_colors[] = {
 uint8_t txbuffer[UART_TX_BUF_SIZE];
 static int log_level = LOG_DEBUG;
 
+struct __UsartPrintLogMsgDescriptor
+{
+  UART_HandleTypeDef *usartHandle;
+  volatile int log_level;               
+};
+
+static UsartPrintLogMsgDescriptorType UsartPrintLogMsgdescr;
+
+
 
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
+
+UsartPrintErrCodeType UsartPrintLogMsginit(UART_HandleTypeDef* ptr2usartHandle, UsartPrintLogMsgHandleType * ptr2UsartPrintLogMsgHandle){
+  
+  UsartPrintLogMsgHandleType const UsartLogMsgHandle = &UsartPrintLogMsgdescr;
+  
+  UsartLogMsgHandle->usartHandle = ptr2usartHandle;
+  
+  *ptr2UsartPrintLogMsgHandle = UsartLogMsgHandle;
+  
+  return UsartPrintnoERROR;
+    
+}
+
+
+void UsartPrintLogMsgSetLevel(UsartPrintLogMsgHandleType UsartPrintLogMsgHandle, int level){
+  
+  UsartPrintLogMsgHandle->log_level = level; 
+   
+}
+
 
 
 /* USART Print function */
@@ -80,30 +109,32 @@ UsartPrintErrCodeType UsartPrintLogMsg(UART_HandleTypeDef *ptr2usartHandle, int 
   
   
   
-  if(level >= log_level){
+  if(level >= UsartPrintLogMsgdescr.log_level){
 #ifdef LOG_USE_COLOR
     len = sprintf((char*)txbuffer, "%s%-5s\x1b[0m \x1b[90m%s:%d:\x1b[0m ", level_colors[level], level_string[level], file, line);
 #else
     len = sprintf((char*)txbuffer, "%-5s %s:%d: ", level_string[level], file, line);  
 #endif   
-  }
   
-  len = sprintf((char*)txbuffer, "%s%s", txbuffer, format);
   
-  va_start(argptr, format);
-  len = vsprintf((char*)txbuffer, (const char*)txbuffer, argptr);
-  va_end(argptr);
-  
-  respErrValue = HAL_UART_Transmit(ptr2usartHandle, txbuffer, len, 100);
-  
-  if(respErrValue == HAL_ERROR){
-    return UsartPrintERROR;
-  }else if(respErrValue == HAL_TIMEOUT){
-    return UsartPrintTimeoutERROR;
+    len = sprintf((char*)txbuffer, "%s%s", txbuffer, format);
+    
+    va_start(argptr, format);
+    len = vsprintf((char*)txbuffer, (const char*)txbuffer, argptr);
+    va_end(argptr);
+    
+    respErrValue = HAL_UART_Transmit(ptr2usartHandle, txbuffer, len, 100);
+    
+    if(respErrValue == HAL_ERROR){
+      return UsartPrintERROR;
+    }else if(respErrValue == HAL_TIMEOUT){
+      return UsartPrintTimeoutERROR;
+    }else{
+      return UsartPrintnoERROR;
+    }
   }else{
-    return UsartPrintnoERROR;
+    return UsartPrintnoLevel;
   }
-  
 }
   
 

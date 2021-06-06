@@ -44,7 +44,15 @@ typedef enum {
   UsartPrintisBusy,                  ///< ready ststus register
   UsartPrintTimeoutERROR,            ///< timeout error
   UsartPrintInvalidParameter,        ///< at least one parameter was invalid when calling the function
+  UsartPrintnoLevel,
 } UsartPrintErrCodeType;
+
+struct __UsartPrintLogMsgDescriptor;     // incomplte type !
+
+/// Datentyp zur Beschreibung des vollstaendigen Kontextes einer SCD30 Instanz
+typedef struct __UsartPrintLogMsgDescriptor UsartPrintLogMsgDescriptorType;
+
+typedef UsartPrintLogMsgDescriptorType *UsartPrintLogMsgHandleType;
 
 
 enum { LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL };
@@ -58,6 +66,10 @@ enum { LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL };
 /* USER CODE END Private defines */
 
 UsartPrintErrCodeType UsartPrint(UART_HandleTypeDef *ptr2usartHandle, const char * format, ... );
+
+UsartPrintErrCodeType UsartPrintLogMsginit(UART_HandleTypeDef* ptr2usartHandle, UsartPrintLogMsgHandleType * ptr2UsartPrintLogMsgHandle);
+
+void UsartPrintLogMsgSetLevel(UsartPrintLogMsgHandleType UsartPrintLogMsgHandle, int level);
 
 UsartPrintErrCodeType UsartPrintLogMsg(UART_HandleTypeDef *ptr2usartHandle, int level, const char *file, int line, const char * format, ...);
 

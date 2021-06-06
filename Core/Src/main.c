@@ -51,6 +51,8 @@
 SCD30HandleType SCD30Handle;
 MiCS5524HandleType MiCS5524Handle;
 
+UsartPrintLogMsgHandleType UsartPrintLogMsgHandle;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,6 +113,9 @@ int main(void)
   MiCS5524init(&hadc1, &MiCS5524Handle);
   MICS5524_calcOffsetComp(MiCS5524Handle, 100u);
   
+  UsartPrintLogMsginit(&huart2, &UsartPrintLogMsgHandle);
+  UsartPrintLogMsgSetLevel(UsartPrintLogMsgHandle, LOG_WARN);
+  
   UsartPrint(&huart2, "Hallo Welt \r\nHallo Welt \r\nHallo Welt \r\nHallo Welt \r\n");
    
   UsartPrintLogMsg(&huart2, LOG_DEBUG, __FILE__, __LINE__, "Das ist eine Testdebugmessage\r\n");
@@ -118,18 +123,15 @@ int main(void)
   log_info("Testinfomessage .... \r\n");
  
   // adcValue = MICS5524_getValue(MiCS5524Handle);
-
   // SCD30init(&SCD30Handle);
  
   /* USER CODE BEGIN 2 */
   // SCD30_startMeasurement(&hi2c1, SCD30Handle, 0);
-
-  
 	// firmwareVersion =  SCD30_readRegister(&hi2c1, 0xD100);
-  
   // SCD30_getSerialNumber(&hi2c1, SCD30Handle);
-  
   // SCD30_readMeasurement(&hi2c1, SCD30Handle);
+  
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
