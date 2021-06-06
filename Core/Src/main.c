@@ -111,10 +111,12 @@ int main(void)
   MiCS5524init(&hadc1, &MiCS5524Handle);
   MICS5524_calcOffsetComp(MiCS5524Handle, 100u);
   
-  UsartPrint(&huart2, "\x1b[31m Hallo Welt \nHallo Welt \nHallo Welt \nHallo Welt \n");
+  UsartPrint(&huart2, "Hallo Welt \r\nHallo Welt \r\nHallo Welt \r\nHallo Welt \r\n");
    
-  
-    
+  UsartPrintLogMsg(&huart2, LOG_DEBUG, __FILE__, __LINE__, "Das ist eine Testdebugmessage\r\n");
+ 
+  log_info("Testinfomessage .... \r\n");
+ 
   // adcValue = MICS5524_getValue(MiCS5524Handle);
 
   // SCD30init(&SCD30Handle);

@@ -27,6 +27,10 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include "stdio.h"
+#include "stdarg.h"
+#include "stdbool.h"
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -43,9 +47,19 @@ typedef enum {
 } UsartPrintErrCodeType;
 
 
+enum { LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL };
+
+#define log_debug(...) UsartPrintLogMsg(&huart2, LOG_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
+#define log_info(...)  UsartPrintLogMsg(&huart2, LOG_INFO,  __FILE__, __LINE__, __VA_ARGS__)
+#define log_warn(...)  UsartPrintLogMsg(&huart2, LOG_WARN,  __FILE__, __LINE__, __VA_ARGS__)
+#define log_error(...) UsartPrintLogMsg(&huart2, LOG_ERROR, __FILE__, __LINE__, __VA_ARGS__)
+#define log_fatal(...) UsartPrintLogMsg(&huart2, LOG_FATAL, __FILE__, __LINE__, __VA_ARGS__)
+
 /* USER CODE END Private defines */
 
 UsartPrintErrCodeType UsartPrint(UART_HandleTypeDef *ptr2usartHandle, const char * format, ... );
+
+UsartPrintErrCodeType UsartPrintLogMsg(UART_HandleTypeDef *ptr2usartHandle, int level, const char *file, int line, const char * format, ...);
 
 /* USER CODE BEGIN Prototypes */
 
